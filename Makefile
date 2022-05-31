@@ -1,7 +1,8 @@
 MD=markdown
 PDF=pdf
 
-all: introduction metrics_and_evaluation pipelining branches
+all: introduction metrics_and_evaluation pipelining branches predication ilp \
+	instruction_scheduling
 
 clean:
 	rm -f *~
@@ -19,3 +20,12 @@ pipelining: $(MD)/pipelining.md
 
 branches: $(MD)/branches.md
 	pandoc -V geometry:margin=1in -o $(PDF)/branches.pdf $(MD)/branches.md
+
+predication: $(MD)/predication.md
+	pandoc -V geometry:margin=1in -o $(PDF)/predication.pdf $(MD)/predication.md
+
+ilp: $(MD)/ilp.md
+	pandoc -V geometry:margin=1in -o $(PDF)/ilp.pdf $(MD)/ilp.md
+
+instruction_scheduling: $(MD)/instruction_scheduling.md
+	pandoc -V geometry:margin=1in -o $(PDF)/instruction_scheduling.pdf $(MD)/instruction_scheduling.md
