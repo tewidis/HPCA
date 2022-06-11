@@ -2,7 +2,8 @@ MD=markdown
 PDF=pdf
 
 all: introduction metrics_and_evaluation pipelining branches predication ilp \
-	instruction_scheduling reorder_buffer memory_ordering compiler_ilp vliw
+	instruction_scheduling reorder_buffer memory_ordering compiler_ilp vliw \
+	caches virtual_memory
 
 clean:
 	rm -f *~
@@ -41,3 +42,9 @@ compiler_ilp: $(MD)/compiler_ilp.md
 
 vliw: $(MD)/vliw.md
 	pandoc -V geometry:margin=1in -o $(PDF)/vliw.pdf $(MD)/vliw.md
+
+caches: $(MD)/caches.md
+	pandoc -V geometry:margin=1in -o $(PDF)/caches.pdf $(MD)/caches.md
+
+virtual_memory: $(MD)/virtual_memory.md
+	pandoc -V geometry:margin=1in -o $(PDF)/virtual_memory.pdf $(MD)/virtual_memory.md
