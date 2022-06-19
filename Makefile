@@ -1,14 +1,17 @@
 MD=markdown
 PDF=pdf
 
-all: introduction metrics_and_evaluation pipelining branches predication ilp \
-	instruction_scheduling reorder_buffer memory_ordering compiler_ilp vliw \
+all: ta_notes introduction metrics_and_evaluation pipelining branches predication \
+	ilp instruction_scheduling reorder_buffer memory_ordering compiler_ilp vliw \
 	caches virtual_memory
 
 clean:
 	rm -f *~
 	rm -f $(PDF)/*
 	rm -f $(MD)/*~
+
+ta_notes: $(MD)/ta_notes.md
+	pandoc -V geometry:margin=1in -o $(PDF)/ta_notes.pdf $(MD)/ta_notes.md
 
 introduction: $(MD)/introduction.md
 	pandoc -V geometry:margin=1in -o $(PDF)/introduction.pdf $(MD)/introduction.md
