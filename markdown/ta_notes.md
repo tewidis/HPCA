@@ -1,3 +1,57 @@
+# Factors that Prevent Progress
+
+```
+Issue:
+    Instructions must be issued in order.
+    Only a certain number of instructions can be issued in one cycle.
+    An RS entry of the right type must be available.
+    An ROB entry must be available.
+                    
+Dispatch:
+    The RS must have actual values for each operand.
+    An ALU or processing unit must be available.
+    Only a certain number of instructions from each RS can be dispatched in one cycle.
+
+Execution:
+    No limitations.
+
+Broadcast:
+    Only a certain number of instructions may broadcast in the same cycle.
+
+Commit:
+    Instructions must be committed in order.
+    Only a certain number of instructions can be committed in one cycle.
+```
+
+# Processor Characteristics Worksheet
+
+```
+Same cycle:
+    free RS & use RS (?)
+    issue & dispatch (no - See Lesson 8, Video 10. Also see Lesson 9, Video 24 answer at 0:10.)
+    capture & dispatch (no)
+    execute & broadcast (no)
+    reuse ROB (no)
+
+# / cycle:
+    issue (1)
+    broadcast (1)
+
+Dispatch priority (oldest, random)
+
+# of universal RS's: 
+
+ALU's:
+    operation    # RS's    # ALU's      Pipelined?
+
+Exe time:
+    operation    cycles
+
+broadcast priority (slower ALU)
+
+# of ROB's: 
+```
+
 # Tomasulo's Algorithm
 
 ```
