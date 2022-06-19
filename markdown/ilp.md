@@ -44,8 +44,8 @@ value is written to a register
 ## WAW Dependencies
 
 1. When instructions get reordered due to RAW dependencies, it can cause an
-instruction (I1) that should have completed first to actually complete after a later
-instruction (I2)
+instruction (I1) that should have completed first to actually complete after a
+later instruction (I2)
     * This results in the value from I1 persisting in the register even though
     the result from I2 should be present
 
@@ -76,10 +76,12 @@ instruction (I2)
 ## Duplicating Register Values
 
 1. Consider the following program:
-    * I1: R1 = R2 + R3
-    * I2: R4 = R1 - R5
-    * I3: R3 = R4 + 1
-    * I4: R4 = R8 - R9
+```
+I1: R1 = R2 + R3
+I2: R4 = R1 - R5
+I3: R3 = R4 + 1
+I4: R4 = R8 - R9
+```
 2. There's a WAW dependency between I1 and I4
     * Instead of using R4 for both, store all possible values for R4
     * An instruction that wants to read R4 will have to search for the correct
@@ -110,14 +112,14 @@ from the programmer
 
 1. Update the RAT and give the renamed instructions for the following program:
 
-|    Fetched     |      Renamed     |
-|:--------------:|:----------------:|
-| MUL R2, R2, R2 | MUL P7, P2, P2   |
-| ADD R1, R1, R2 | ADD P8, P1, P7   |
-| MUL R2, R4, R4 | MUL P9, P4, P4   |
-| ADD R3, R3, R2 | ADD P10, P3, P9  |
-| MUL R2, R6, R6 | MUL P11, P6, P6  |
-| ADD R5, R5, R2 | ADD P12, P5, P11 |
+| Instruction |    Fetched     |      Renamed     |
+|:-----------:|:--------------:|:----------------:|
+| I1          | MUL R2, R2, R2 | MUL P7, P2, P2   |
+| I2          | ADD R1, R1, R2 | ADD P8, P1, P7   |
+| I3          | MUL R2, R4, R4 | MUL P9, P4, P4   |
+| I4          | ADD R3, R3, R2 | ADD P10, P3, P9  |
+| I5          | MUL R2, R6, R6 | MUL P11, P6, P6  |
+| I6          | ADD R5, R5, R2 | ADD P12, P5, P11 |
 
 | Register | RAT |
 |:--------:|:---:|
@@ -139,14 +141,14 @@ from the programmer
         - I1, I3, I5 can be executed in cycle 1
         - I2, I4, I6 can be executed in cycle 2
 
-|    Fetched     |      Renamed     |
-|:--------------:|:----------------:|
-| MUL R2, R2, R2 | MUL P7, P2, P2   |
-| ADD R1, R1, R2 | ADD P8, P1, P7   |
-| MUL R2, R4, R4 | MUL P9, P4, P4   |
-| ADD R3, R3, R2 | ADD P10, P3, P9  |
-| MUL R2, R6, R6 | MUL P11, P6, P6  |
-| ADD R5, R5, R2 | ADD P12, P5, P11 |
+| Instruction |    Fetched     |      Renamed     |
+|:-----------:|:--------------:|:----------------:|
+| I1          | MUL R2, R2, R2 | MUL P7, P2, P2   |
+| I2          | ADD R1, R1, R2 | ADD P8, P1, P7   |
+| I3          | MUL R2, R4, R4 | MUL P9, P4, P4   |
+| I4          | ADD R3, R3, R2 | ADD P10, P3, P9  |
+| I5          | MUL R2, R6, R6 | MUL P11, P6, P6  |
+| I6          | ADD R5, R5, R2 | ADD P12, P5, P11 |
 
 ## Instruction Level Parallelism (ILP)
 
@@ -164,27 +166,31 @@ from the programmer
 ## ILP Example
 
 1. Consider the following program:
-    * I1: ADD P10, P2, P3
-    * I2: XOR P6, P7, P8
-    * I3: MUL P5, P8, P9
-    * I4: ADD P4, P8, P9
-    * I5: SUB P11, P10, P5
-    * True dependency between I3 and I5, so they must execute in separate cycles
-2. ILP = 5 instructions / 2 cycles = 2.5
-3. Convenient tricks for ILP
+```
+I1: ADD P10, P2, P3
+I2: XOR P6, P7, P8
+I3: MUL P5, P8, P9
+I4: ADD P4, P8, P9
+I5: SUB P11, P10, P5
+```
+2. True dependency between I3 and I5, so they must execute in separate cycles
+3. ILP = 5 instructions / 2 cycles = 2.5
+4. Convenient tricks for ILP
     * Don't actually have to rename registers, only need to consider true
     dependencies
 
 ## ILP Quiz
 
 1. Consider the following program:
-    * ADD R1, R1, R1 (cycle 1)
-    * ADD R2, R2, R1 (cycle 2)
-    * ADD R3, R2, R1 (cycle 3)
-    * ADD R6, R7, R8 (cycle 1)
-    * ADD R8, R3, R7 (cycle 4)
-    * ADD R1, R1, R1 (cycle 2)
-    * ADD R1, R7, R7 (cycle 1)
+```
+ADD R1, R1, R1 (cycle 1)
+ADD R2, R2, R1 (cycle 2)
+ADD R3, R2, R1 (cycle 3)
+ADD R6, R7, R8 (cycle 1)
+ADD R8, R3, R7 (cycle 4)
+ADD R1, R1, R1 (cycle 2)
+ADD R1, R7, R7 (cycle 1)
+```
 2. ILP = 7 instructions / 4 cycles = 1.75
 
 ## ILP with Structural and Control Dependencies
@@ -202,10 +208,11 @@ from the programmer
     ideal processor
 
 | Instructions       | 1 | 2 | 3 |
-| ADD R1, R2, R3     | X |   |   |
-| MUL R1, R1, R1     |   | X |   |
-| BNE R1, R1, L1     |   |   | X |
-| ADD R5, R1, R2     |   |   |   |
+|:------------------:|:-:|:-:|:-:|
+|     ADD R1, R2, R3 | X |   |   |
+|     MUL R1, R1, R1 |   | X |   |
+|     BNE R1, R1, L1 |   |   | X |
+|     ADD R5, R1, R2 |   |   |   |
 | L1: MUL R5, R7, R8 | X |   |   |
 
 ## ILP vs IPC
@@ -216,18 +223,20 @@ from the programmer
     * Out-of-order superscalar (doesn't need to execute in program order)
     * 1 MUL, 2 ADD/SUB/XOR
 3. Consider the following program:
-    * ADD R1, R2, R3
-    * SUB R4, R1, R5
-    * XOR R6, R7, R8
-    * MUL R5, R8, R9
-    * ADD R4, R8, R9
+```
+ADD R1, R2, R3
+SUB R4, R1, R5
+XOR R6, R7, R8
+MUL R5, R8, R9
+ADD R4, R8, R9
+```
 4. ILP = 5 / 2 = 2.5
     * ADD, XOR, MUL, ADD execute in the first cycle
     * SUB executes in the second cycle
 5. IPC = 5 / 2 = 1.5
     * Last add must execute in the second cycle because both adders are in use
     * If we only had 1 adder, 5 instructions execute in 4 cycles = 1.25
-6. IPC can be equal to ILP, but not necessarily
+6. IPC can be equal to ILP, but this is not necessarily true
     * ILP is greater than or equal to IPC on any given processor
 
 ## IPC vs ILP Quiz
@@ -236,12 +245,14 @@ from the programmer
     * 3-issue in-order
     * 3 ALUs
 2. Consider the following program:
-    * ADD R1, R2, R3
-    * ADD R2, R3, R4
-    * ADD R3, R1, R2
-    * ADD R7, R8, R9
-    * ADD R1, R7, R7
-    * ADD R1, R4, R5
+```
+ADD R1, R2, R3
+ADD R2, R3, R4
+ADD R3, R1, R2
+ADD R7, R8, R9
+ADD R1, R7, R7
+ADD R1, R4, R5
+```
 3. ILP = 6 / 2 = 3
 4. IPC = 6 / 3 = 2
 5. In an in-order processor, once an instruction is skipped, we can no longer

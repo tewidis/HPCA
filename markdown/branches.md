@@ -55,10 +55,11 @@ execute instead of 1
 2. Branch resolved in 3rd stage
 3. Fetch nothing until sure what to fetch
 4. Execute many iterations of:
-    * LOOP:
-        - ADDI R1, R1, -1
-        - ADD R2, R2, R2
-        - BNE R1, LOOP
+```
+LOOP: ADDI R1, R1, -1
+      ADD R2, R2, R2
+      BNE R1, LOOP
+```
 5. Speedup of predictor is: 7/3 = 2.33
     * ADD and ADDI costs 2 cycles (since we don't know if the instruction is a
     branch until the decode stage, we don't fetch the next instruction)
@@ -79,14 +80,16 @@ execute instead of 1
 ## Multiple Predictions Quiz
 
 1. Consider the following program:
-    * BNE R1, R2, Label A (taken)
-    * BNE R1, R3, Label B (taken)
-    * A
-    * B
-    * C
-    * Label A: X
-    * Y
-    * Label B: Z
+```
+BNE R1, R2, Label A (taken)
+BNE R1, R3, Label B (taken)
+A
+B
+C
+Label A: X
+Y
+Label B: Z
+```
 2. How many cycles are wasted on mispredictions until we get to Y?
     * Have fetched second branch and A, resulting in 2 cycles wasted
     * Second mis-prediction causes no further penalty
@@ -175,84 +178,96 @@ likely to execute soon
         - 0: Not a taken branch (PC++)
         - 1: Taken branch (use BTB)
     * Table can be large since an entry is only 1 bit
+
+| ![direction](images/branches_direction_predictor.png) |
+|:--:|
+| Direction Predictor |
         
 ## BTB and BHT Quiz 1
 
 1. Consider the following program:
-    * 0xC000       MOV R2, 100
-    * 0xC004       MOV R1, 0 
-    * 0xC008 Loop: BEQ R1, R2, Done
-    * 0xC00C       ADD R4, R3, R1
-    * 0xC010       LW R4, 0(R4)
-    * 0xC014       ADD R5, R5, R4
-    * 0xC018       ADD R1, R1, 1
-    * 0xC01C       B Loop
-    * 0xC020 Done: 
+```
+0xC000       MOV R2, 100
+0xC004       MOV R1, 0 
+0xC008 Loop: BEQ R1, R2, Done
+0xC00C       ADD R4, R3, R1
+0xC010       LW R4, 0(R4)
+0xC014       ADD R5, R5, R4
+0xC018       ADD R1, R1, 1
+0xC01C       B Loop
+0xC020 Done: 
+```
 2. BHT with 16 entries, perfect predictions
 3. BTB with 4 entries, perfect predictions
 4. How many times do we access the BHT for each instruction?
-    * 0xC000       MOV R2, 100 (1)
-    * 0xC004       MOV R1, 0  (1)
-    * 0xC008 Loop: BEQ R1, R2, Done (101)
-    * 0xC00C       ADD R4, R3, R1 (100)
-    * 0xC010       LW R4, 0(R4) (100)
-    * 0xC014       ADD R5, R5, R4 (100)
-    * 0xC018       ADD R1, R1, 1 (100)
-    * 0xC01C       B Loop (100)
-    * 0xC020 Done: 
-
+```
+0xC000       MOV R2, 100 (1)
+0xC004       MOV R1, 0  (1)
+0xC008 Loop: BEQ R1, R2, Done (101)
+0xC00C       ADD R4, R3, R1 (100)
+0xC010       LW R4, 0(R4) (100)
+0xC014       ADD R5, R5, R4 (100)
+0xC018       ADD R1, R1, 1 (100)
+0xC01C       B Loop (100)
+0xC020 Done: 
+```
 ## BTB and BHT Quiz 2
 
 1. Which BHT entry do we access for each instruction?
-    * 0xC000       MOV R2, 100 (0)
-    * 0xC004       MOV R1, 0 (1)
-    * 0xC008 Loop: BEQ R1, R2, Done (2)
-    * 0xC00C       ADD R4, R3, R1 (3)
-    * 0xC010       LW R4, 0(R4) (4)
-    * 0xC014       ADD R5, R5, R4 (5)
-    * 0xC018       ADD R1, R1, 1 (6)
-    * 0xC01C       B Loop (7)
-    * 0xC020 Done: 
-
+```
+0xC000       MOV R2, 100 (0)
+0xC004       MOV R1, 0 (1)
+0xC008 Loop: BEQ R1, R2, Done (2)
+0xC00C       ADD R4, R3, R1 (3)
+0xC010       LW R4, 0(R4) (4)
+0xC014       ADD R5, R5, R4 (5)
+0xC018       ADD R1, R1, 1 (6)
+0xC01C       B Loop (7)
+0xC020 Done: 
+```
 ## BTB and BHT Quiz 3
 
 1. How many times do we access the BTB for each instruction?
-    * 0xC000       MOV R2, 100 (0)
-    * 0xC004       MOV R1, 0  (0)
-    * 0xC008 Loop: BEQ R1, R2, Done (1)
-    * 0xC00C       ADD R4, R3, R1 (0)
-    * 0xC010       LW R4, 0(R4) (0)
-    * 0xC014       ADD R5, R5, R4 (0)
-    * 0xC018       ADD R1, R1, 1 (0)
-    * 0xC01C       B Loop (100)
-    * 0xC020 Done: 
-
+```
+0xC000       MOV R2, 100 (0)
+0xC004       MOV R1, 0  (0)
+0xC008 Loop: BEQ R1, R2, Done (1)
+0xC00C       ADD R4, R3, R1 (0)
+0xC010       LW R4, 0(R4) (0)
+0xC014       ADD R5, R5, R4 (0)
+0xC018       ADD R1, R1, 1 (0)
+0xC01C       B Loop (100)
+0xC020 Done: 
+```
 ## BTB and BHT Quiz 4
 
 1. Which BTB entry do we use for each instruction?
-    * 0xC000       MOV R2, 100
-    * 0xC004       MOV R1, 0 
-    * 0xC008 Loop: BEQ R1, R2, Done (2)
-    * 0xC00C       ADD R4, R3, R1
-    * 0xC010       LW R4, 0(R4)
-    * 0xC014       ADD R5, R5, R4
-    * 0xC018       ADD R1, R1, 1
-    * 0xC01C       B Loop (4)
-    * 0xC020 Done: 
-
+```
+0xC000       MOV R2, 100
+0xC004       MOV R1, 0 
+0xC008 Loop: BEQ R1, R2, Done (2)
+0xC00C       ADD R4, R3, R1
+0xC010       LW R4, 0(R4)
+0xC014       ADD R5, R5, R4
+0xC018       ADD R1, R1, 1
+0xC01C       B Loop (4)
+0xC020 Done: 
+```
 ## BTB and BHT Quiz 5
 
 1. BHT: 16 entries, 1-bit initialized to not taken
-1. How many mispredictions do we have for each instruction?
-    * 0xC000       MOV R2, 100 (0)
-    * 0xC004       MOV R1, 0 (0)
-    * 0xC008 Loop: BEQ R1, R2, Done (1)
-    * 0xC00C       ADD R4, R3, R1 (0)
-    * 0xC010       LW R4, 0(R4) (0)
-    * 0xC014       ADD R5, R5, R4 (0)
-    * 0xC018       ADD R1, R1, 1 (0)
-    * 0xC01C       B Loop (1)
-    * 0xC020 Done: 
+2. How many mispredictions do we have for each instruction?
+```
+0xC000       MOV R2, 100 (0)
+0xC004       MOV R1, 0 (0)
+0xC008 Loop: BEQ R1, R2, Done (1)
+0xC00C       ADD R4, R3, R1 (0)
+0xC010       LW R4, 0(R4) (0)
+0xC014       ADD R5, R5, R4 (0)
+0xC018       ADD R1, R1, 1 (0)
+0xC01C       B Loop (1)
+0xC020 Done: 
+```
 3. 1-bit predictor works well for loops with many iterations
 
 ## Problems with 1 Bit Predictions
@@ -406,19 +421,25 @@ than or equal to N+1
 1. N-bit history, 2BC / history
 2. Need 1024 entries
 
-| N bits | Cost (bits)    | NNNT... | # 2BCs used for NT... |
-|:------:|:--------------:|:-------:|:---------------------:|
-| N = 1  | 5 * 2^10       |    N    |            2          |
-| N = 4  | (4+2*2^4)*2^10 |    Y    |            2          |
-| N = 8  | 532480         |    Y    |            2          |
-| N = 16 | 134234112      |    Y    |            2          |
+| N bits | Cost (bits)               | NNNT... | # 2BCs used for NT... |
+|:------:|:-------------------------:|:-------:|:---------------------:|
+| N = 1  | 5 * 2^10                  |    N    |            2          |
+| N = 4  | (4 + 2 * 2 ^ 4 ) * 2 ^ 10 |    Y    |            2          |
+| N = 8  | 532480                    |    Y    |            2          |
+| N = 16 | 134234112                 |    Y    |            2          |
 
 ## History Predictor Quiz
 
 1. Consider the following program:
-    * for(int i = 0; i < 8; i++)
-    * for(int j = 0; j < 8; j++)
-    * doSomething();
+``` C
+for(int i = 0; i < 8; i++)
+{
+    for(int j = 0; j < 8; j++)
+    {
+        doSomething();
+    }
+}
+```
 2. To build a branch predictor for this code, we need at least 4 entries
     * Each entry should have at least 8-bit history
     * This implies 2^8 2-bit counters
@@ -454,7 +475,7 @@ than or equal to N+1
 
 1. Pshare predictor: Private history for each branch with shared counters
     * Good for even-odd, 8-iteration loop
-2. Gshare predictory: Global history for all branches with shared counters
+2. Gshare predictor: Global history for all branches with shared counters
     * Good for correlated branches, as follows:
     * if(shape == square) { ... }
     * ...
@@ -463,17 +484,25 @@ than or equal to N+1
 ## PShare vs GShare Quiz
 
 1. Consider the following program:
-    * for(int i = 1000; i > 0; i--)
-        - if(i % 2) { n += i; }
-2. Maps to the following assembly
-    * Loop: BEQ R1, Zero, Exit
-    *       AND R2, R1, 1
-    *       BEQ R2, Zero, Even
-    *       ADD R3, R3, R1
-    * Even: ADD R1, R1, -1
-    *       B Loop
-    * Exit:
-3, How many bits of history for good accuracy on all branches?
+``` C
+for(int i = 1000; i > 0; i--)
+{
+    if(i % 2) { n += i; }
+}
+```
+2. Maps to the following assembly:
+
+```
+Loop: BEQ R1, Zero, Exit
+      AND R2, R1, 1
+      BEQ R2, Zero, Even
+      ADD R3, R3, R1
+Even: ADD R1, R1, -1
+      B Loop
+Exit:
+```
+
+3. How many bits of history for good accuracy on all branches?
     * Pshare: 1
     * Gshare: 3
 4. B Loop and BEQ R1, Zero, Exit are easy to predict
@@ -582,7 +611,7 @@ the rest of the branch prediction logic
 2. Wrap around strategy is preferable because there can be many calls and returns
     * If we stop pushing, all of this is lost to preserve the initial calls
     * By wrapping around, we can overwrite small function calls many times, but
-    still predict the correctly
+    still predict the target correctly
 3. Neither will do things perfectly, but wrap around performs better
 
 ## But How Do We Know It's a RET?

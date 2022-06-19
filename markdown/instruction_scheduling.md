@@ -8,7 +8,7 @@ for greater speeds even in the presence of data dependencies
 ## Improving IPC
 
 1. ILP is typically >> 1
-2. Need to redice control dependencies -> branch prediction
+2. Need to reduce control dependencies -> branch prediction
 3. WAR/WAW data dependencies -> register renaming
 4. RAW data dependencies -> out of order execution
 5. Structural dependencies -> invest in wider-issue processors
@@ -24,7 +24,7 @@ for greater speeds even in the presence of data dependencies
     to all instructions
     * Tomasulo used fewer instructions in the "window" while today, we apply it
     to 100s of instructions
-    * Tomasulo provided little support for instruction handling. This is fully
+    * Tomasulo provided little support for exception handling. This is fully
     supported in modern processors
 
 ## The Big Picture
@@ -166,7 +166,7 @@ nothing
         - Writing to RS and dispatching happen simultaneously, so it isn't ready
     * Can we do same-cycle capture -> dispatch? No
         - Same reason as above, need to wait until next cycle
-    * Can we update RAY entry for issue and write result in the same cycle? Yes
+    * Can we update RAT entry for issue and write result in the same cycle? Yes
         - Need to ensure the issuing instruction is written last since future
         instructions depend on that value
         - Since it's simple (just write the issue value), we can handle this case
@@ -299,7 +299,7 @@ are broadcasting in the same cycle
 |:------:|:-------------:|:-----:|:-------:|:-----:|:---------:|
 | 1      | LD F6,34(R2)  | 1     | 2       | 4     |           |
 | 2      | LD F2,45(R3)  | 2     | 4       | 6     |           |
-| 3      | MUL F2,F2,F4  | 3     | 7       | 17    | F2 from 2 |
+| 3      | MUL F0,F2,F4  | 3     | 7       | 17    | F2 from 2 |
 | 4      | SUB F8,F2,F6  | 4     | 7       | 9     | F2 from 2 |
 | 5      | DIV F10,F0,F6 | 5     | 18      | 58    | F0 from 3 |
 | 6      | ADD F6,F8,F2  | 6     | 10      | 12    | F8 from 4 |

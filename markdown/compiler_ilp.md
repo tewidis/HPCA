@@ -16,31 +16,47 @@
 
 1. R8 = R2 + R3 + R4 + R5
     * This can be done as follows, but has a long dependence chain
-        - ADD R8, R2, R3
-        - ADD R8, R8, R4
-        - ADD R8, R8, R5
+
+```
+ADD R8, R2, R3
+ADD R8, R8, R4
+ADD R8, R8, R5
+```
+
     * Alternatively, use associativity to facilitate parallelism
-        - ADD R8, R2, R3
-        - ADD R7, R4, R5
-        - ADD R8, R8, R7
+
+```
+ADD R8, R2, R3
+ADD R7, R4, R5
+ADD R8, R8, R7
+
+```
     * However, not all operations all associative
 
 ## Tree Height Reduction Quiz
 
 1. Consider the following program:
-    * ADD R10, R1, R2
-    * SUB R10, R10, R3
-    * ADD R10, R10, R4
-    * SUB R10, R10, R5
-    * ADD R10, R10, R6
-    * SUB R10, R10, R7
+
+```
+ADD R10, R1, R2
+SUB R10, R10, R3
+ADD R10, R10, R4
+SUB R10, R10, R5
+ADD R10, R10, R6
+SUB R10, R10, R7
+```
+
 2. Rewrite reducing the tree height
-    * ADD R10, R1, R2
-    * ADD R11, R4, R6
-    * ADD R10, R10, R11
-    * ADD R11, R3, R5
-    * ADD R11, R11, R7
-    * SUB R10, R10, R10
+
+```
+ADD R10, R1, R2
+ADD R11, R4, R6
+ADD R10, R10, R11
+ADD R11, R3, R5
+ADD R11, R11, R7
+SUB R10, R10, R10
+```
+
 3. Original ILP = 6 instructions / 6 cycles = 1
 4. New ILP = 6 instructions / 3 cycles = 2
 
@@ -56,31 +72,43 @@
 ## Instruction Scheduling
 
 1. Consider the following program:
-    * Loop: LW R2, 0(R1)
-    * ADD R2, R2, R0
-    * SW R2, 0(R1)
-    * ADDI R1, R1, R4
-    * BNE R1, R3, Loop
+
+```
+Loop: LW R2, 0(R1)
+      ADD R2, R2, R0
+      SW R2, 0(R1)
+      ADDI R1, R1, 4
+      BNE R1, R3, Loop
+```
+
 2. If a processor can only look at the next instruction, it must insert stalls
 between every instruction until they finish
-3. Compiler could rewrite the program as follows to reduce the number of stalls
-    * Loop: LW R2, 0(R1)
-    * ADDI R1, R1, 4
-    * ADD R2, R2, R0
-    * SW R2, -4(R1)
-    * BNE R1, R3, Loop
+3. Compiler could rewrite the program as follows to reduce the number of stalls:
+
+```
+Loop: LW R2, 0(R1)
+      ADDI R1, R1, 4
+      ADD R2, R2, R0
+      SW R2, -4(R1)
+      BNE R1, R3, Loop
+```
+
 4. Idea of instruction scheduling is to find instructions that can be moved in
 place of stalls to reduce the number of idle cycles
 
 ## Instruction Scheduling Quiz
 
 1. Consider the following program:
-    * LW R1, 0(R2)
-    * ADD R1, R1, R3
-    * SW R1, 0(R2)
-    * LW R1, 0(R4)
-    * ADD R1, R1, R5
-    * SW R1, 0(R4)
+
+```
+LW R1, 0(R2)
+ADD R1, R1, R3
+SW R1, 0(R2)
+LW R1, 0(R4)
+ADD R1, R1, R5
+SW R1, 0(R4)
+```
+
 2. Assumptions:
     * LW takes 2 cycles
     * ADD takes 1 cycle
@@ -91,6 +119,16 @@ place of stalls to reduce the number of idle cycles
 4. How many cycles does the program take to execute after instruction scheduling
 in the compiler?
     * 6 cycles
+    * Rewrite the program as follows:
+
+```
+LW R1, 0(R2)
+LW R10, 0(R4)
+ADD R1, R1, R3
+ADD R10, R10, R5
+SW R1, 0(R2)
+SW R10, 0(R4)
+```
 
 ## Scheduling and If Conversion
 
@@ -104,40 +142,66 @@ in the compiler?
 ## If-Conversion of Loops
 
 1. Consider the following program:
-    * Loop: LW R2, 0(R1)
-    * ADD R2, R2, R3
-    * SW R2, 0(R1)
-    * ADDI R1, R1, 4
-    * BNE R1, R2, Loop
-    * Assume every instruction takes two cycles
+    * Assume every instruciton takes two cycles
+
+```
+Loop: LW R2, 0(R1)
+      ADD R2, R2, R3
+      SW R2, 0(R1)
+      ADDI R1, R1, 4
+      BNE R1, R2, Loop
+```
+
 2. The naive approach of predicating every iteration would be prohibitively
 expensive
 
 ## Loop Unrolling
 
 1. Consider the following program:
-    * for(int i = 1000; i != 0; i--) { a[i] = a[i] + s; }
+
+``` C
+for(int i = 1000; i != 0; i--)
+{
+    a[i] = a[i] + s;
+}
+```
+
 2. This is equivalent to:
-    * Loop: LW R2, 0(R1)
-    * ADD R2, R2, R3
-    * SW R2, 0(R1)
-    * ADDI R1, R1, 4
-    * BNE R1, R2, Loop
+
+```
+Loop: LW R2, 0(R1)
+      ADD R2, R2, R3
+      SW R2, 0(R1)
+      ADDI R1, R1, 4
+      BNE R1, R2, Loop
+```
+
 3. Loop unrolling will optimize to the following:
-    * for(i = 1000; i != 0; i-=2) { a[i] = a[i] + s; a[i-1] = a[i-1] + s; }
     * This has eliminated half of the conditional branches
     * Can unroll multiple times
     * IMPORTANT: This is unrolled only once; unrolling twice means another
     instruction inside the loop
+
+``` C
+for(i = 1000; i != 0; i-=2)
+{
+    a[i] = a[i] + s;
+    a[i-1] = a[i-1] + s;
+}
+```
+
 4. This is equivalent to:
-    * Loop: LW R1, 0(R1)
-    * ADD R2, R2, R3
-    * SW R2, 0(R1)
-    * LW R2, -4(R1)
-    * ADD R2, R2, R3
-    * SW R2, -4(R1)
-    * ASSI R1, R1, -8
-    * BNE R1, R5, Loop
+
+```
+Loop: LW R1, 0(R1)
+      ADD R2, R2, R3
+      SW R2, 0(R1)
+      LW R2, -4(R1)
+      ADD R2, R2, R3
+      SW R2, -4(R1)
+      ADDI R1, R1, -8
+      BNE R1, R5, Loop
+```
 
 ## Loop Unrolling Benefits ILP
 
@@ -165,10 +229,14 @@ expensive
 ## Loop Unrolling Quiz
 
 1. Consider the following program:
-    * Loop: LW R1, 0(R2)
-    * ADD R3, R3, R1
-    * ADDI R2, R2, 4
-    * BNE R2, R4, Loop
+
+```
+Loop: LW R1, 0(R2)
+      ADD R3, R3, R1
+      ADDI R2, R2, 4
+      BNE R2, R4, Loop
+```
+
 2. Assumptions:
     * In-order, 1 instruction/cycle
     * LW: 3 cycles
@@ -180,12 +248,16 @@ expensive
     * (3 + 2) * 1000 = 5000
 4. After unrolling once and scheduling, how many cycles per 1000 iterations?
     * Code after unrolling is as follows:
-        - Loop: LW R1, 0(R2)
-        - LW R8, 4(R2)
-        - ADD R3, R3, R1
-        - ADDI R2, R2, 8
-        - ADD R3, R3, R8
-        - BNE R2, R4, Loop
+
+```
+Loop: LW R1, 0(R2)
+      LW R8, 4(R2)
+      ADD R3, R3, R1
+      ADDI R2, R2, 8
+      ADD R3, R3, R8
+      BNE R2, R4, Loop
+```
+
     * We save 1000 cycles by removing instructions (3000 instead of 4000)
     * We save 500 instructions by allowing better scheduling
     * Total = 5000 - 1000 - 500 = 3500
@@ -231,12 +303,17 @@ function
 ## Function Inlining Quiz
 
 1. Consider the following program:
-    * LW A0, 0(R1)
-    * CALL AddSq
-    * SW RV, 0(R2)
-    * AddSq: MUL A0, A0, A0
-    * ADD Rv, A0, A1
-    * RET
+
+```
+LW A0, 0(R1)
+CALL AddSq
+SW RV, 0(R2)
+
+AddSq: MUL A0, A0, A0
+       ADD Rv, A0, A1
+       RET
+```
+
 2. Assumptions:
     * LW: 2 cycles
     * CALL: 2 cycles

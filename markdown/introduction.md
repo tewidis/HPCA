@@ -18,10 +18,8 @@
 
 1. Improve performance
     * Speed, battery life, size, weight, energy efficiency
-
 2. Improve abilities
     * 3D graphics, developer support, security
-
 3. Translate improvements in fabrication technology and circuit design into
 faster, lighter, cheaper, and more secure designs
 

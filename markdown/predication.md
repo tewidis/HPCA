@@ -33,14 +33,29 @@ be highly accurate
 
 ## If Conversion
 
-1. if(cond) { x = arr[i]; y++; } else { x = arr[j]; y--; }
-    * x1 = arr[i];
-    * x2 = arr[j];
-    * y1 = y + 1;
-    * y2 = y - 1;
-    * x = cond ? x1 : x2; -> Now we have two branches
-    * y = cond ? y1 : y2; -> Now we have two branches
-2. Need some sort of conditional move instruction in hardware
+1. Consider the following program:
+``` C
+if(cond)
+{
+    x = arr[i]; 
+    y++;
+}
+else
+{
+    x = arr[j];
+    y--;
+}
+```
+2. This could be rewritten as follows:
+``` C
+x1 = arr[i];
+x2 = arr[j];
+y1 = y + 1;
+y2 = y - 1;
+x = cond ? x1 : x2; // Now we have two branches
+y = cond ? y1 : y2; // Now we have two branches
+```
+3. Need some sort of conditional move instruction in hardware
     * MOV x, x1, cond
 
 ## Conditional Move
@@ -55,16 +70,20 @@ be highly accurate
 ## MovZ MovN Quiz
 
 1. Consider the following program:
-    * BEQZ R1, Else
-    * ADDI R2, R2, 1
-    * B End
-    * Else: ADDI R3, R3, 1
-    * End:
+```
+BEQZ R1, Else
+ADDI R2, R2, 1
+B End
+Else: ADDI R3, R3, 1
+End:
+```
 2. How do we rewrite this with conditional moves?
-    * ADDI R4, R2, 1
-    * ADDI R5, R3, 1
-    * MOVN R2, R4, R1
-    * MOVZ R3, R5, R1
+```
+ADDI R4, R2, 1
+ADDI R5, R3, 1
+MOVN R2, R4, R1
+MOVZ R3, R5, R1
+```
 
 ## MovZ MovN Performance
 
@@ -77,10 +96,25 @@ be highly accurate
 
 ## MovZ MovN Performance Quiz
 
-1. Assumptions:
+1. Consider the following program:
+```
+BEQZ R1, Else
+ADDI R2, R2, 1
+B End
+Else: ADDI R3, R3, 1
+End:
+```
+2. This can be rewritten as follows using conditional moves:
+```
+ADDI R4, R2, 1
+ADDI R5, R3, 1
+MOVN R2, R4, R1
+MOVZ R3, R5, R1
+```
+3. Assumptions:
     * Branch is taken 50% of the time
     * 30-instruction misprediction penalty
-2. If-conversion is better when prediction accuracy is below...
+4. If-conversion is better when prediction accuracy is below...
     * 2.5 + Accuracy * 30 = 4
     * Accuracy = (4 - 2.5) / 30 = 0.05 (5%)
     * If prediction accuracy is below 95%, predication is better
@@ -122,15 +156,19 @@ result
 ## Full Predication Quiz
 
 1. Consider the following program:
-    * BEQZ R2, ELSE
-    * ADD R1, R1, 1
-    * B DONE
-    * ELSE: ADD R1, R1, -1
-    * DONE:
-2. Convert to full predication version
-    * MP.EQZ P1, P2, R2 (P1 -> R2 == 0, P2 -> R2 != 0)
-    * (P2) ADD R1, R1, 1
-    * (P1) ADD R1, R1, -1
+```
+BEQZ R2, ELSE
+ADD R1, R1, 1
+B DONE
+ELSE: ADD R1, R1, -1
+DONE:
+```
+2. Convert to full predication version:
+```
+MP.EQZ P1, P2, R2 (P1 -> R2 == 0, P2 -> R2 != 0)
+(P2) ADD R1, R1, 1
+(P1) ADD R1, R1, -1
+```
 3. Assuming
     * CPI = 0.5 without mispredictions
     * Misprediction penalty is 10 cycles

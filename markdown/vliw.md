@@ -37,7 +37,7 @@ them to do
     * Works well on loops and "regular" code
         - Traversing arrays, multiplying matrices, etc.
 2. Cons:
-    * Lantecies of instructions are not always the same (e.g. cache miss)
+    * Latencies of instructions are not always the same (e.g. cache miss)
     * Irregular applications (pointer-intensive code, AI applications)
         - VLIW struggles in cases where many decisions are required
     * Code bloat

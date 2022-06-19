@@ -174,20 +174,24 @@ called until the instruction commits
 ## Exceptions with ROB Quiz
 
 1. Consider the following program:
-    * ADD R2, R2, R1 - Committed
-    * LW R1, 0(R1) - Executing
-    * ADD R3, R4, R5 - Done
-    * DIV R3, R2, R3 - Executing
-    * ADD R1, R4, R4 - Done
-    * ADD R3, R2, R2 - Done
+```
+ADD R2, R2, R1 - Committed
+LW R1, 0(R1) - Executing
+ADD R3, R4, R5 - Done
+DIV R3, R2, R3 - Executing
+ADD R1, R4, R4 - Done
+ADD R3, R2, R2 - Done
+```
 2. Suppose the divide triggers an exception. What is the status of each
 instruction when the exception handler is called?
-    * ADD R2, R2, R1 - Committed
-    * LW R1, 0(R1) - Committed
-    * ADD R3, R4, R5 - Committed
-    * DIV R3, R2, R3 - Unexecuted
-    * ADD R1, R4, R4 - Unexecuted
-    * ADD R3, R2, R2 - Unexecuted
+```
+ADD R2, R2, R1 - Committed
+LW R1, 0(R1) - Committed
+ADD R3, R4, R5 - Committed
+DIV R3, R2, R3 - Unexecuted
+ADD R1, R4, R4 - Unexecuted
+ADD R3, R2, R2 - Unexecuted
+```
 
 ## RAT Updates on Commit
 
@@ -211,21 +215,21 @@ in the RAT
 
 | ![cycle1](images/reorder_buffer_example_cycle_1.png) |
 |:--:|
-| Branch Misprediction Cycle 1 |
+| ROB Example Cycle 1 |
 
 | ![cycle2](images/reorder_buffer_example_cycle_2.png) |
 |:--:|
-| Branch Misprediction Cycle 2 |
+| ROB Example Cycle 2 |
 
 ## ROB Example Cycles 3-4
 
 | ![cycle3](images/reorder_buffer_example_cycle_3.png) |
 |:--:|
-| Branch Misprediction Cycle 3 |
+| ROB Example Cycle 3 |
 
 | ![cycle4](images/reorder_buffer_example_cycle_4.png) |
 |:--:|
-| Branch Misprediction Cycle 4 |
+| ROB Example Cycle 4 |
 
 1. Make sure to first get the input registers, then update the RAT
     * If an instruction is overwriting an input register, it would be waiting
@@ -235,11 +239,11 @@ in the RAT
 
 | ![cycle5](images/reorder_buffer_example_cycle_5.png) |
 |:--:|
-| Branch Misprediction Cycle 5 |
+| ROB Example Cycle 5 |
 
 | ![cycle6](images/reorder_buffer_example_cycle_6.png) |
 |:--:|
-| Branch Misprediction Cycle 6 |
+| ROB Example Cycle 6 |
 
 1. Instruction 3 is done, but cannot be committed until all previous instructions
 have been committed
@@ -250,33 +254,33 @@ instructions are waiting on results in registers
 
 | ![cycle13](images/reorder_buffer_example_cycle_13.png) |
 |:--:|
-| Branch Misprediction Cycle 13 |
+| ROB Example Cycle 13 |
 
 | ![cycle14](images/reorder_buffer_example_cycle_14.png) |
 |:--:|
-| Branch Misprediction Cycle 14 |
+| ROB Example Cycle 14 |
 
 | ![cycle24](images/reorder_buffer_example_cycle_24.png) |
 |:--:|
-| Branch Misprediction Cycle 24 |
+| ROB Example Cycle 24 |
 
 ## ROB Example Cycles 25-43
 
 | ![cycle25](images/reorder_buffer_example_cycle_25.png) |
 |:--:|
-| Branch Misprediction Cycle 25 |
+| ROB Example Cycle 25 |
 
 | ![cycle25](images/reorder_buffer_example_cycle_26.png) |
 |:--:|
-| Branch Misprediction Cycle 26 |
+| ROB Example Cycle 26 |
 
 | ![cycle42](images/reorder_buffer_example_cycle_42.png) |
 |:--:|
-| Branch Misprediction Cycle 42 |
+| ROB Example Cycle 42 |
 
 | ![cycle43](images/reorder_buffer_example_cycle_43.png) |
 |:--:|
-| Branch Misprediction Cycle 43 |
+| ROB Example Cycle 43 |
 
 1. When an instruction commits, remember to update the ARF and RAT
 
@@ -284,33 +288,35 @@ instructions are waiting on results in registers
 
 | ![cycle44](images/reorder_buffer_example_cycle_44.png) |
 |:--:|
-| Branch Misprediction Cycle 44 |
+| ROB Example Cycle 44 |
 
 | ![cycle45](images/reorder_buffer_example_cycle_45.png) |
 |:--:|
-| Branch Misprediction Cycle 45 |
+| ROB Example Cycle 45 |
 
 | ![cycle46](images/reorder_buffer_example_cycle_46.png) |
 |:--:|
-| Branch Misprediction Cycle 46 |
+| ROB Example Cycle 46 |
 
 | ![cycle47](images/reorder_buffer_example_cycle_47.png) |
 |:--:|
-| Branch Misprediction Cycle 47 |
+| ROB Example Cycle 47 |
 
 | ![cycle48](images/reorder_buffer_example_cycle_48.png) |
 |:--:|
-| Branch Misprediction Cycle 48 |
+| ROB Example Cycle 48 |
 
 ## ROB Quiz 1
 
 1. Consider the following program:
-    * DIV R2, R3, R4
-    * MUL R1, R5, R6
-    * ADD R3, R7, R8
-    * MUL R1, R1, R2
-    * SUB R4, R3, R5
-    * ADD R1, R4, R2
+```
+DIV R2, R3, R4
+MUL R1, R5, R6
+ADD R3, R7, R8
+MUL R1, R1, R2
+SUB R4, R3, R5
+ADD R1, R4, R2
+```
 2. What is contained in the RAT for R2 at the end of cycle 1?
     * ROB1
 

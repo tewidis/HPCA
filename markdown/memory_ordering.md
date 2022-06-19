@@ -68,11 +68,15 @@ when the next load is enqueued. In this case, there are three options:
 ## Out of Order Load Store Execution
 
 1. Consider the following program:
-    * LOAD R3 = 0(R6)
-    * ADD R7 = R3 + R4
-    * STORE R4 -> 0(R7)
-    * SUB R1 = R1 - R2
-    * LOAD R8 = 0(R1)
+
+```
+LOAD R3 = 0(R6)
+ADD R7 = R3 + R4
+STORE R4 -> 0(R7)
+SUB R1 = R1 - R2
+LOAD R8 = 0(R1)
+```
+
 2. Suppose the first load is a cache miss and takes many cycles to complete
     * The following ADD and STORE can't execute until this load finishes
     * The SUB finishes quickly and allows the LOAD to complete
@@ -146,16 +150,24 @@ access the same address (only use the most recent previous instruction)
 ## Memory Ordering Quiz 1
 
 1. Consider the following program:
-    * SW R1 -> 0(R2)
-    * LW R2 <- 0(R2)
+
+```
+SW R1 -> 0(R2)
+LW R2 <- 0(R2)
+```
+
 2. Does LW access cache or memory?
     * No
 
 ## Memory Ordering Quiz 2
 
 1. Consider the following program:
-    * SW R1 -> 0(R2)
-    * LW R2 <- 0(R2)
+
+```
+SW R1 -> 0(R2)
+LW R2 <- 0(R2)
+```
+
 2. The load gets its result from:
     * A result broadcast (false)
     * A reservation station (false)

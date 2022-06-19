@@ -83,11 +83,13 @@ are incorrect. I6 should have actually been loaded
 ## Control Dependencies
 
 1. Consider the following program:
-    * ADD R1, R1, R2
-    * BEQ R1, R3, Label
-    * ADD R2, R3, R4
-    * SUB R5, R6, R8
-    * Label: MUL R5, R6, R8
+```
+ADD R1, R1, R2
+BEQ R1, R3, Label
+ADD R2, R3, R4
+SUB R5, R6, R8
+Label: MUL R5, R6, R8
+```
 2. Instructions 3, 4, and 5 are said to have a control dependency on the branch
 3. How do control dependencies impact CPI in a 5-stage pipeline?
     * 20% of instructions are branch/jump
@@ -108,9 +110,11 @@ are incorrect. I6 should have actually been loaded
 ## Data Dependencies
 
 1. Consider the following program:
-    * ADD R1, R2, R3
-    * SUB R7, R1, R8
-    * MUL R1, R5, R6
+```
+ADD R1, R2, R3
+SUB R7, R1, R8
+MUL R1, R5, R6
+```
 2. ADD must finish before SUB can continue since it depends on the value in R1
     * Called "Read after Write" dependence (RAW), flow dependence, or true
     dependence
@@ -142,11 +146,13 @@ are incorrect. I6 should have actually been loaded
 
 1. Dependence: Property of program alone
 2. Consider the following program:
-    * I1: ADD R1, R2, R3
-    * I2: MUL R1, R4, R5
-    * I3: SUB R4, R6, R7
-    * I4: DIV R10, R4, R8
-    * I5: XOR R11, R1, R7
+```
+I1: ADD R1, R2, R3
+I2: MUL R1, R4, R5
+I3: SUB R4, R6, R7
+I4: DIV R10, R4, R8
+I5: XOR R11, R1, R7
+```
     * The WAW dependence between I1 and I2 isn't an issue since I2 is guaranteed
     to finished after I1
     * The WAR dependence between I2 and I3 isn't an issue since the writeback
@@ -169,10 +175,12 @@ are incorrect. I6 should have actually been loaded
     * Read register/ALU
     * Memory/Writeback to register
 2. Consider the following program:
-    * I1: ADD R1, R2, R4
-    * I2: SUB R5, R1, R4
-    * I3: DIV R6, R1, R7
-    * I4: MUL R7, R1, R8
+```
+I1: ADD R1, R2, R4
+I2: SUB R5, R1, R4
+I3: DIV R6, R1, R7
+I4: MUL R7, R1, R8
+```
 
 | Instr | Dependence? | Hazard? |
 |:-----:|:-----------:|:-------:|
@@ -205,12 +213,14 @@ stall
     * Memory
     * Writeback
 2. Consider the following program:
-    * I1: BNE R1, R0, Label
-    * I2: ADD R4, R5, R6
-    * I3: SUB R5, R4, R3
-    * I4: MUL R1, R2, R3
-    * I5: LW R1, 0(R1)
-    * I6: ADD R1, R1, R1
+```
+I1: BNE R1, R0, Label
+I2: ADD R4, R5, R6
+I3: SUB R5, R4, R3
+I4: MUL R1, R2, R3
+I5: LW R1, 0(R1)
+I6: ADD R1, R1, R1
+```
 
 | Instruction | Flush | Stall | Forward |
 |:-----------:|:-----:|:-----:|:-------:|
