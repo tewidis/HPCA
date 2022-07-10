@@ -3,7 +3,7 @@ PDF=pdf
 
 all: ta_notes introduction metrics_and_evaluation pipelining branches predication \
 	ilp instruction_scheduling reorder_buffer memory_ordering compiler_ilp vliw \
-	caches virtual_memory
+	caches virtual_memory advanced_caches memory storage fault_tolerance
 
 clean:
 	rm -f *~
@@ -51,3 +51,15 @@ caches: $(MD)/caches.md
 
 virtual_memory: $(MD)/virtual_memory.md
 	pandoc -V geometry:margin=1in -o $(PDF)/virtual_memory.pdf $(MD)/virtual_memory.md
+
+advanced_caches: $(MD)/advanced_caches.md
+	pandoc -V geometry:margin=1in -o $(PDF)/advanced_caches.pdf $(MD)/advanced_caches.md
+
+memory: $(MD)/memory.md
+	pandoc -V geometry:margin=1in -o $(PDF)/memory.pdf $(MD)/memory.md
+
+storage: $(MD)/storage.md
+	pandoc -V geometry:margin=1in -o $(PDF)/storage.pdf $(MD)/storage.md
+
+fault_tolerance: $(MD)/fault_tolerance.md
+	pandoc -V geometry:margin=1in -o $(PDF)/fault_tolerance.pdf $(MD)/fault_tolerance.md
