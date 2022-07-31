@@ -43,17 +43,15 @@ to occur in the same order on all cores
 ## Coherence Definition Quiz
 
 1. Two cores in a coherent system:
-    * Core 1:
 
 ``` C
+// Core 1
 A = 1;
 while(A == 1);
 A = 1;
 printf("Done 1!");
-```
-    * Core 2:
 
-``` C
+// Core 2
 A = 0;
 while(A == 0);
 A = 0;
@@ -130,7 +128,7 @@ needs to be broadcast or not
     * Add a separate line to the bus to communicate if a block is already in
     another core's cache
         - If a block is only used by one core, its writes don't go to the bus
-3. In the below example, writes to B and C will not be brodcast while writes to
+3. In the example below, writes to B and C will not be brodcast while writes to
 A will be broadcast
 
 | ![bus_optimization](images/cache_coherence_bus_optimization.png)
@@ -256,7 +254,7 @@ protocol's performance in this case drives processors to use invalidate
 3. C2 writes, C1: I, C2: M
     * Repeats
     * Data is moving between caches, but memory is also written each time
-4. C1 read, C2 responds withd data
+4. C1 read, C2 responds with data
     * C1: S, C2: S
 5. C3 read, memory provides data
     * We can avoid this memory read by having another cache respond
@@ -385,7 +383,7 @@ the same location, the reader is evicted from the directory
 1. 4 cores numbered 0-3, directory for A in slice 0
 2. Consider the following sequence of accesses:
     * C0: RD A (request sent to directory, directory sends response)
-    * C0: WR A (requests sent to directory, directory forwards message,
+    * C0: WR A (request sent to directory, directory forwards message,
     directory gets response, directory sends response)
     * C1: RD A (request sent to directory, directory sends response)
         - C0: O, C1: S
@@ -415,7 +413,7 @@ the same location, the reader is evicted from the directory
 
 ## False Sharing Quiz
 
-1. Which of these have false sharing misses?
+1. The cache is initially in the following state:
 
 | A | B | C | D |
 |:-:|:-:|:-:|:-:|

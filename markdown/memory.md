@@ -122,7 +122,7 @@ back
     * 11 ns to write data from sense amplifier to memory row
         - This is overlapped with putting data in row buffer and decoding
 3. How many reads per second can this memory support?
-    * Read takes 4 + 10 + max(2 + 6, 11) = 25 ns -> 40 M refreshes per second
+    * Read takes 4 + 10 + max(2 + 4, 11) = 25 ns -> 40 M refreshes per second
     * Refresh period is 500 microseconds, so we need to do 2000 refreshes per
     second
     * Refreshes per second = 2000 * 4096 = 8.192 M refreshes per second
@@ -163,32 +163,32 @@ row buffer instead of re-opening the page
     * Read from row buffer: 2 ns
     * Page close: 5 ns
 4. Consider the following set of memory accesses:
-    * F00F00
-    * E00F00
-    * F00E04
-    * E04F00
-    * E00E00
-    * F00123
-    * 123F00
+    * 0xF00F00
+    * 0xE00F00
+    * 0xF00E04
+    * 0xE04F00
+    * 0xE00E00
+    * 0xF00123
+    * 0x123F00
     * The upper three hex digits are the row address, the lower three are the
     column address
 5. How long do these memory accesses take in the current order?
-    * F00F00 (10 + 2 + 5 = 17)
-    * E00F00 (10 + 2 + 5 = 17)
-    * F00E04 (10 + 2 + 5 = 17)
-    * E04F00 (10 + 2 + 5 = 17)
-    * E00E00 (10 + 2 + 5 = 17)
-    * F00123 (10 + 2 + 5 = 17)
-    * 123F00 (10 + 2 + 5 = 17)
+    * 0xF00F00 (10 + 2 + 5 = 17)
+    * 0xE00F00 (10 + 2 + 5 = 17)
+    * 0xF00E04 (10 + 2 + 5 = 17)
+    * 0xE04F00 (10 + 2 + 5 = 17)
+    * 0xE00E00 (10 + 2 + 5 = 17)
+    * 0xF00123 (10 + 2 + 5 = 17)
+    * 0x123F00 (10 + 2 + 5 = 17)
     * 17 * 7 = 119 ns
 6. How long do these memory accesses take in the optimal reordering?
-    * F00F00 (10 + 2 = 12)
-    * F00E04 (2)
-    * F00123 (2 + 5 = 7)
-    * E00E00 (10 + 2 = 12)
-    * E00F00 (2 + 5 = 7)
-    * E04F00 (10 + 2 + 5 = 17)
-    * 123F00 (10 + 2 + 5 = 17)
+    * 0xF00F00 (10 + 2 = 12)
+    * 0xF00E04 (2)
+    * 0xF00123 (2 + 5 = 7)
+    * 0xE00E00 (10 + 2 = 12)
+    * 0xE00F00 (2 + 5 = 7)
+    * 0xE04F00 (10 + 2 + 5 = 17)
+    * 0x123F00 (10 + 2 + 5 = 17)
     * Total = 12 + 2 + 7 + 12 + 7 + 17 + 17 = 74
 
 ## Connecting DRAM to the Processor
@@ -204,7 +204,7 @@ row buffer instead of re-opening the page
     * Memory latency
     * Sending the data back over the memory channel
     * Sending the data back to the processor from the memory controller
-3. Recent processor integrate the memory controller into the same chip as the
+3. Recent processors integrate the memory controller into the same chip as the
 processor and caches
     * Eliminates the need for the front-side bus to reduce latency (10-30%)
     * This means the processor is designed to work with a specific type of DRAM

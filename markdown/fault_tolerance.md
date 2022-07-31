@@ -84,16 +84,16 @@ system to provide that service
 
 1. By cause
     * Hardware faults: Hardware fails to perform as designed
-    * Design faults: Software bugs, hardware design mistakes
-    * Operation faults: Operator and user mistakes
-    * Environmental faults: Fire, power failure, sabotage, etc.
+        - Design faults: Software bugs, hardware design mistakes
+        - Operation faults: Operator and user mistakes
+        - Environmental faults: Fire, power failure, sabotage, etc.
 2. By duration
     * Permanent faults: Once we have it, it doesn't get corrected
         - Wanted to see what's inside a processor and now it's in four pieces
     * Intermittent faults: Last for some duration, but recurring
-        - Overclock -> Works fine the crashes
-    * Transient faults: Fault last for a while then goes away
-        - Alpha particle hits chip causing problems, but go awway after a reboot
+        - Overclock -> Works fine then crashes
+    * Transient faults: Fault lasts for a while then goes away
+        - Alpha particle hits chip causing problems, but goes away after a reboot
 
 ## Fault Classification Quiz
 
@@ -107,7 +107,7 @@ system to provide that service
 ## Improving Reliability and Availability
 
 1. Fault avoidance: Prevent faults from occurring
-    * No offee in server room
+    * No coffee in server room
 2. Fault tolerance: Prevent faults from becoming failures
     * Redundancy: ECC (error correcting code) for memory
 3. Speed up repair: Only affects availability
@@ -169,7 +169,7 @@ only the first case
 2. Error detection and correction codes are commonly used
     * Store bits with extra information to detect and/or correct one or more
     bits of error
-    * Parity: Add one extra bits (xor of all data bits)
+    * Parity: Add one extra bit (xor of all data bits)
         - Fault flips one bit -> parity does not match data
     * Error correction code (ECC): SECDED codes
         - SECDED: Single error correction, double error detection

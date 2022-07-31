@@ -13,7 +13,7 @@ things that just happened
 ## Locality Quiz
 
 1. Which of these are not good examples of locality?
-    * Rained 3 time today -> likely to rain again today
+    * Rained 3 times today -> likely to rain again today
     * Ate dinner at 6 every day last week -> probabaly we will eat dinner around
     6 this week
     * It was New Year's Eve yesterday -> Probably it will be New Year's Eve
@@ -28,8 +28,15 @@ things that just happened
 ## Temporal Locality Quiz
 
 1. Consider the following program:
-    * int sum = 0;
-    * for(int j = 0; j < 1000; j++) { sum = sum + arr[j]; }
+
+``` C
+int sum = 0;
+for(int j = 0; j < 1000; j++)
+{
+    sum = sum + arr[j];
+}
+```
+
 2. Which of these memory locations has temporal locality in this code?
     * j (yes)
     * sum (yes)
@@ -38,8 +45,15 @@ things that just happened
 ## Spatial Locality Quiz
 
 1. Consider the following program:
-    * int sum = 0;
-    * for(int j = 0; j < 1000; j++) { sum = sum + arr[j]; }
+
+``` C
+int sum = 0;
+for(int j = 0; j < 1000; j++)
+{
+    sum = sum + arr[j];
+}
+```
+
 2. Which of these memory locations has spatial locality in this code?
     * j (no)
     * sum (no)
@@ -394,7 +408,7 @@ and there are 8 such lines in a 2-way set-associative cache (4 sets).
 ## Write Policy
 
 1. Allocate policy: Do we insert blocks we write?
-    * Write-allocate: Brings the block we write into the cache
+    * Write-allocate: Bring the block we write into the cache
     * No-write-allocate: Don't bring the block we write into the cache
 2. Most modern caches are write-allocate because there is some locality between
 reads and writes
@@ -426,6 +440,7 @@ to different sets in the cache, but E maps to A and F maps to B
     * Read C
     * Write C
     * Read E
+    * Read F
 2. The final state of the cache is:
     * Dirty bit is set whenever the instruction is a write
     * When E overwrites A, we must write the data in A back to memory

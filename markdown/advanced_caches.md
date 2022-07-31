@@ -203,10 +203,10 @@ highly associative cache
         - Keep doing while there is at least one counter is 0
     * When the final bit is set to 1, zero out all other counters
         - Now, we only know the MRU block
-2. When one bit is set, we're implementing the NRMU policy
+2. When one bit is set, we're implementing the NMRU policy
 3. When between one and all but one bits are set, we're in between NMRU/LRU
 4. When all but one bits are set, we're implementing the LRU policy
-5. Both NRMU and PLRU have much less activity on a hit, which helps with power
+5. Both NMRU and PLRU have much less activity on a hit, which helps with power
 and reduces hit time
 
 ## NMRU Quiz
@@ -282,7 +282,7 @@ another miss
 1. Original program:
 
 ``` C
-for(int i = 0; i < 100000; i++
+for(int i = 0; i < 100000; i++)
 {
     sum += a[i];
 }
@@ -291,7 +291,7 @@ for(int i = 0; i < 100000; i++
 2. Program with prefetching:
 
 ``` C
-for(int i = 0; i < 100000; i++
+for(int i = 0; i < 100000; i++)
 {
     prefetch a[i+pdist];
     sum += a[i];
@@ -420,14 +420,14 @@ cache misses
 ## AMAT With Cache Hierarchies
 
 1. AMAT = L1 hit time + L1 miss rate * L1 miss penalty
-2. L1 miss penality = L2 hit time = L2 miss rate * L2 miss penalty
+2. L1 miss penality = L2 hit time + L2 miss rate * L2 miss penalty
 3. LN miss penalty = Main memory latency
     * LLC: Last level cache
 
 ## L1 vs L2
 
 1. Which of these statements are true?
-    * L1 capacty < L2 capacity (true)
+    * L1 capacity < L2 capacity (true)
     * L1 latency < L2 latency (true)
     * L1 # of accesses < L2 # of accesses (false)
     * L1 associativity == L2 associativity (false)

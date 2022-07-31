@@ -12,7 +12,7 @@ one thread per core
 3. Notation
     * SISD: Single instruction single data
     * SIMD: Single instruction multiple data
-        - Vector instructison (SSE/MMX)
+        - Vector instruction (SSE/MMX)
     * MISD: Multiple instruction single data
         - Stream processor
         - This isn't used much
@@ -42,7 +42,7 @@ one thread per core
 
 1. Consider the following processors:
     * Old processor: 2 cm^2, IPC = 2.5, 100W @ 2 GHz
-    * New processor: 1 cm^2, IPC = 2.5, 50W @ GHz
+    * New processor: 1 cm^2, IPC = 2.5, 50W @ 2 GHz
 2. Better single core processor:
     * 2 cm^2, IPC = 3.5, 75W @ 2 GHz
 3. If we allow the processor to use all 100W, what is the frequency and speedup

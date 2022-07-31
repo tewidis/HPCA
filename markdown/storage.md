@@ -36,12 +36,16 @@
 2. Data along one track is stored in sectors
     * Each sector has some bit pattern to indicate the beginning/end of sector
 3. Disk capacity
-    * # of platters * 2 * # tracks / surface (# cylinders) * # sectors / track *
-    # bytes / sector
+    * num_platters * 2 * num_tracks / surface (num_cylinders) * num_sectors / 
+    track * num_bytes / sector
         - Number of platters: Typically 1-4
         - Number of tracks / surface: 1000s
         - Number of sectors per track: 10s - 100s
         - Number of bytes per sector: On the order of 1 kB
+
+| ![construction](images/storage_construction.png) |
+|:--:|
+| Storage Construction |
 
 ## Access Time for Magnetic Disks
 
@@ -85,7 +89,7 @@
     * Changes in material of platter
     * Makes more noise
     * Improves slowly
-4. Controller, buss
+4. Controller and bus
     * Improves at a reasonable rate
 5. Disk access time is dominated by seek time and, to a lesser extent,
 rotational latency
@@ -186,7 +190,7 @@ the surface
         - Standards limit the rate of improvement
 2. Typically have a hierarchy of buses
     * Mezzanine bus (PCI Express)
-        - Prett fast, short
+        - Pretty fast, short
         - Directly connect fast devices (graphics)
     * SATA/SCSI controllers are connected through PCI Express
         - These controllers connect to a SATA bus

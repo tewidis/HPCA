@@ -152,7 +152,7 @@ data in their L3 cache?
     * Distributed partial directory
 4. Power budget split among cores
     * As the number of cores increases, the number of Watts per core decreases
-    beacuse frequency and voltage also decrease
+    because frequency and voltage also decrease
     * A single-threaded program would only get 1/N of the total power despite
     none of the other cores requiring the rest of the power
 
@@ -163,7 +163,7 @@ data in their L3 cache?
     * f = 3.8 GHz
 2. Two cores can spend 50W per core
     * Power = 1/2 P1 (V ~ f)
-    * Power = (1 / 2) ^ (1 / 3) = 0.8 * f = 3.0 GHz
+    * Power = (1/2) ^ (1/3) = 0.8 * f = 3.0 GHz
 
 ## Performance vs Number of Cores Quiz
 
@@ -181,7 +181,7 @@ change in frequency
 5. What is the execution speed for four cores? Remember to take into account the
 change in frequency
     * 20 / 1 + 30 / 2 + 40 / 3 + 10 / 4 = 50.8 seconds
-    * 50.8 & 5 / 3.2 = 79.375 seconds
+    * 50.8 * 5 / 3.2 = 79.375 seconds
 
 | Available Parallelism | % of 1-core time |
 |:---------------------:|:----------------:|
