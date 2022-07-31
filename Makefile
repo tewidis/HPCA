@@ -4,7 +4,8 @@ PDF=pdf
 all: ta_notes introduction metrics_and_evaluation pipelining branches predication \
 	ilp instruction_scheduling reorder_buffer memory_ordering compiler_ilp vliw \
 	caches virtual_memory advanced_caches memory storage fault_tolerance \
-	multi_processing cache_coherence synchronization memory_consistency many_cores
+	multi_processing cache_coherence synchronization memory_consistency many_cores \
+	final_1 final_2
 
 clean:
 	rm -f *~
@@ -79,3 +80,9 @@ memory_consistency: $(MD)/memory_consistency.md
 
 many_cores: $(MD)/many_cores.md
 	pandoc -V geometry:margin=1in -o $(PDF)/many_cores.pdf $(MD)/many_cores.md
+
+final_1: $(MD)/final_1.md
+	pandoc -V geometry:margin=1in -o $(PDF)/final_1.pdf $(MD)/final_1.md
+
+final_2: $(MD)/final_2.md
+	pandoc -V geometry:margin=1in -o $(PDF)/final_2.pdf $(MD)/final_2.md
